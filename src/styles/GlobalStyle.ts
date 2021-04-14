@@ -14,12 +14,8 @@ export const GlobalStyle = createGlobalStyle`
 		font-size: 62.5%;
 		font-family: Roboto, sans-serif;
 
-		@media (max-width: 1120px) {
-			font-size: 58%;
-		}
-
-		@media (max-width: 720px) {
-			font-size: 54%;
+		@media (max-width: 768px) {
+			font-size: 43.75%;
 		}
 	}
 

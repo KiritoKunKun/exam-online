@@ -1,6 +1,6 @@
-import { Container } from './ProvaStyle';
+import { Container } from './ExamStyle';
 
-export const Prova = () => {
+export const Exam = () => {
   return (
     <Container>
       <h1>Teste</h1>
