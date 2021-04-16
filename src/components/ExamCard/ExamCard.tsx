@@ -15,7 +15,6 @@ export const ExamCard = () => {
     <Container disabled={disabled}>
       <div>
         <mark>Simulado Enem 2021</mark>
-
         <h3>Linguagens e Códigos</h3>
       </div>
 

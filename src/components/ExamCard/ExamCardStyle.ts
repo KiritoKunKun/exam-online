@@ -11,10 +11,12 @@ export const Container = styled.div<ContainerProps>`
   width: 222px;
   height: 150px;
   padding: 7px 10px 15px 10px;
+  background-color: ${Colors.white};
   border-radius: 2px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
   position: relative;
   justify-content: space-between;
+  cursor: pointer;
 
   ${({ disabled }) =>
     disabled &&
@@ -24,7 +26,7 @@ export const Container = styled.div<ContainerProps>`
 
   mark {
     font-size: 10px;
-    line-height: 22px;
+    line-height: 16px;
     font-weight: normal;
     color: ${Colors.white};
     background-color: ${Colors.orange};

@@ -1,13 +1,17 @@
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { ExamCard } from '../../components/ExamCard/ExamCard';
+import { ResultCard } from '../../components/ResultCard/ResultCard';
 import {
   ArrowContainer,
   Container,
   ExamsContainer,
+  ExamsGrid,
   ExamsInnerContainer,
   GridContainer,
   NextExams,
   ResultsContainer,
+  ResultsGrid,
+  ResultsTitleContainer,
   Subtitle,
   Title,
 } from './DashboardStyle';
@@ -22,9 +26,12 @@ export const Dashboard = () => {
           <Subtitle>Provas em progresso (4)</Subtitle>
 
           <ExamsInnerContainer>
-            <ExamCard />
-            <ExamCard />
-            <ExamCard />
+            <ExamsGrid>
+              <ExamCard />
+              <ExamCard />
+              <ExamCard />
+              <ExamCard />
+            </ExamsGrid>
 
             <ArrowContainer>
               <ArrowForwardIosIcon />
@@ -36,18 +43,25 @@ export const Dashboard = () => {
           <ExamsContainer>
             <Subtitle>Próximas provas (2)</Subtitle>
 
-            <ExamsInnerContainer>
+            <ExamsGrid>
               <ExamCard />
               <ExamCard />
-            </ExamsInnerContainer>
+            </ExamsGrid>
           </ExamsContainer>
         </NextExams>
 
         <ResultsContainer>
-          <div>
+          <ResultsTitleContainer>
             <Subtitle>Seus resultados (6)</Subtitle>
             <a href='/results'>Ver todos</a>
-          </div>
+          </ResultsTitleContainer>
+
+          <ResultsGrid>
+            <ResultCard />
+            <ResultCard />
+            <ResultCard />
+            <ResultCard />
+          </ResultsGrid>
         </ResultsContainer>
       </GridContainer>
     </Container>

@@ -25,7 +25,7 @@ export const Container = styled.div`
     text-decoration: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1200px) {
     height: 50px;
     padding: 0 16px;
 
