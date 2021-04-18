@@ -1,21 +1,36 @@
 import ViewModuleSharpIcon from '@material-ui/icons/ViewModuleSharp';
 import WatchLaterSharp from '@material-ui/icons/WatchLaterSharp';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Proof, Student } from '../../utils/types';
 import {
   Container,
-  Date,
+  DateText,
   DisabledMask,
   InformationsContainer,
   ProgressBar,
 } from './ExamCardStyle';
 
-export const ExamCard = () => {
-  const disabled = false;
+interface ExamCardProps {
+  student: Student;
+  proof: Proof;
+}
+
+export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
+  const history = useHistory();
+
+  const disabled = !proof.id; // TODO
+
+  const title =
+    student.exam.type === 'EXAM'
+      ? 'Avaliação trimestral 20.3'
+      : `Simulado Enem ${new Date(student.event.date).getFullYear()}`;
 
   return (
-    <Container disabled={disabled}>
+    <Container disabled={disabled} onClick={() => history.push('/prova')}>
       <div>
-        <mark>Simulado Enem 2021</mark>
-        <h3>Linguagens e Códigos</h3>
+        <mark>{title}</mark>
+        <h3>{student.exam.description}</h3>
       </div>
 
       <div>
@@ -33,11 +48,11 @@ export const ExamCard = () => {
 
           <div>
             <ViewModuleSharpIcon />
-            <h4>00:20:45</h4>
+            <h4>{`${student.exam.data?.answeredItems}/${student.exam.data?.itemsTotal} questões`}</h4>
           </div>
         </InformationsContainer>
 
-        <Date>De 20/12/20 à 20/01/21</Date>
+        <DateText>De 20/12/20 à 20/01/21</DateText>
       </div>
 
       {disabled && <DisabledMask />}

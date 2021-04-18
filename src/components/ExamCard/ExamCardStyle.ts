@@ -81,12 +81,12 @@ export const InformationsContainer = styled.div`
     }
 
     & + div {
-      margin-left: 20px;
+      margin-left: auto;
     }
   }
 `;
 
-export const Date = styled.h4`
+export const DateText = styled.h4`
   font-size: 10px;
   line-height: 12px;
   font-weight: 300;

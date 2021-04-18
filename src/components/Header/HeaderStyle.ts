@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   width: 100%;
   height: 76px;
-  padding: 0 30px;
+  padding: 0 35px;
   align-items: center;
   background-color: ${Colors.pink};
 

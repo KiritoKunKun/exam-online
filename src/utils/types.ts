@@ -28,7 +28,7 @@ export interface Answer {
 export interface Proof {
   id: string;
   events: Event;
-  exam: ExamType;
+  exam: Exam;
 }
 
 export interface Student {

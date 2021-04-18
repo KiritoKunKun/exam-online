@@ -6,7 +6,6 @@ export const Header = () => {
     <Container>
       <Menu />
       <a href='/'>SOMOS</a>
-      <a href='/prova'>PROVA</a>
     </Container>
   );
 };
