@@ -1,8 +1,11 @@
 import BookmarkIcon from '@material-ui/icons/Bookmark';
+import BookmarkBorderSharpIcon from '@material-ui/icons/BookmarkBorderSharp';
 import MoreHorizSharpIcon from '@material-ui/icons/MoreHorizSharp';
 import SendIcon from '@material-ui/icons/Send';
 import ViewModuleSharpIcon from '@material-ui/icons/ViewModuleSharp';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import { useEffect, useState } from 'react';
+import { useToast } from '../../hooks/Toast/ToastContext';
 import {
   AnswerContainer,
   BookmarkContainer,
@@ -15,6 +18,14 @@ import {
 } from './ExamStyle';
 
 export const Exam = () => {
+  const [bookmarked, setBookmarked] = useState(false);
+
+  const { addToast } = useToast();
+
+  useEffect(() => {
+    addToast('Teste');
+  }, []);
+
   return (
     <Container>
       <ExamHeader>
@@ -44,7 +55,11 @@ export const Exam = () => {
         <ExamContainer>
           <BookmarkContainer>
             <h2>1</h2>
-            <BookmarkIcon />
+            {bookmarked ? (
+              <BookmarkIcon onClick={() => setBookmarked(false)} />
+            ) : (
+              <BookmarkBorderSharpIcon onClick={() => setBookmarked(true)} />
+            )}
           </BookmarkContainer>
 
           <QuestionContainer>
@@ -60,11 +75,21 @@ export const Exam = () => {
 
             <AnswerContainer>
               <h3>A</h3>
-              <input type='radio' />
-              <h3>
+              <input id='A' type='radio' name='answer' value='A' />
+              <label htmlFor='A'>
                 um impedimento às transações comerciais em contexto
                 internacional.
-              </h3>
+              </label>
+              <MoreHorizSharpIcon />
+            </AnswerContainer>
+
+            <AnswerContainer>
+              <h3>B</h3>
+              <input id='B' type='radio' name='answer' value='B' />
+              <label htmlFor='B'>
+                um impedimento às transações comerciais em contexto
+                internacional.
+              </label>
               <MoreHorizSharpIcon />
             </AnswerContainer>
           </QuestionContainer>

@@ -24,6 +24,7 @@ export const InnerContainer = styled.div`
     background-color: ${Colors.darkOrange};
     padding: 2px 6px;
     border-radius: 2px;
+    user-select: none;
   }
 
   h3 {
@@ -32,6 +33,7 @@ export const InnerContainer = styled.div`
     color: ${Colors.black};
     width: 107px;
     margin-top: 5px;
+    user-select: none;
   }
 
   div {
@@ -42,6 +44,7 @@ export const InnerContainer = styled.div`
       line-height: 13px;
       font-weight: normal;
       color: ${Colors.gray};
+      user-select: none;
     }
 
     h5 {
@@ -50,6 +53,7 @@ export const InnerContainer = styled.div`
       font-weight: 300;
       color: ${Colors.gray};
       margin-top: 5px;
+      user-select: none;
     }
   }
 `;
@@ -75,12 +79,14 @@ export const ProgressDataContainer = styled.div`
     line-height: 14px;
     font-weight: normal;
     color: ${Colors.gray};
+    user-select: none;
 
     b {
       font-size: 16px;
       line-height: 14px;
       font-weight: 700;
       color: ${Colors.green};
+      user-select: none;
     }
   }
 
@@ -90,5 +96,6 @@ export const ProgressDataContainer = styled.div`
     font-weight: normal;
     color: ${Colors.black};
     margin-top: 3px;
+    user-select: none;
   }
 `;

@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    browser: true,
+    node: true,
     es2021: true,
   },
   extends: [
@@ -24,6 +24,16 @@ module.exports = {
     'react/jsx-filename-extension': [0],
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'jsx-a11y/label-has-associated-control': [
+      2,
+      {
+        labelComponents: ['CustomInputLabel'],
+        labelAttributes: ['label'],
+        controlComponents: ['CustomInput'],
+        depth: 3,
+      },
+    ],
+    'no-undef': 'off',
     'import/prefer-default-export': 'off',
     'jsx-quotes': ['error', 'prefer-single'],
     'import/extensions': [

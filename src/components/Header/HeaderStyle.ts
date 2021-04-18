@@ -23,6 +23,7 @@ export const Container = styled.div`
     color: ${Colors.white};
     margin-left: 30px;
     text-decoration: none;
+    user-select: none;
   }
 
   @media (max-width: 1200px) {

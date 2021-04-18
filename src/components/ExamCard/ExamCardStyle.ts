@@ -32,6 +32,7 @@ export const Container = styled.div<ContainerProps>`
     background-color: ${Colors.orange};
     padding: 2px 6px;
     border-radius: 2px;
+    user-select: none;
   }
 
   h3 {
@@ -39,6 +40,7 @@ export const Container = styled.div<ContainerProps>`
     line-height: 18px;
     color: ${Colors.black};
     margin-top: 10px;
+    user-select: none;
   }
 `;
 
@@ -78,6 +80,7 @@ export const InformationsContainer = styled.div`
       font-weight: normal;
       color: ${Colors.gray};
       margin-left: 4px;
+      user-select: none;
     }
 
     & + div {
@@ -92,6 +95,7 @@ export const DateText = styled.h4`
   font-weight: 300;
   color: ${Colors.gray};
   margin-top: 16px;
+  user-select: none;
 `;
 
 export const DisabledMask = styled.div`

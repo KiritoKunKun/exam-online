@@ -50,6 +50,7 @@ export const ExamHeader = styled.div`
     border: 1px solid ${Colors.pink};
     border-radius: 2px;
     background-color: ${Colors.white};
+    cursor: pointer;
 
     h2 {
       font-size: 14px;
@@ -57,6 +58,7 @@ export const ExamHeader = styled.div`
       font-weight: 700;
       color: ${Colors.pink};
       margin-left: auto;
+      user-select: none;
     }
 
     svg {
@@ -120,6 +122,7 @@ export const BookmarkContainer = styled.div`
     width: 24px;
     height: 24px;
     color: ${Colors.pink};
+    cursor: pointer;
   }
 `;
 
@@ -131,6 +134,7 @@ export const QuestionContainer = styled.div`
   img {
     width: 100%;
     height: 320px;
+    user-select: none;
   }
 
   p {
@@ -149,11 +153,12 @@ export const AnswerContainer = styled.div`
   height: 54px;
   padding: 0 9px 0 6px;
 
-  label {
+  h3 {
     font-size: 14px;
     line-height: 18px;
     font-weight: normal;
     color: ${Colors.black};
+    user-select: none;
   }
 
   input[type='radio'] {
@@ -162,13 +167,14 @@ export const AnswerContainer = styled.div`
     color: ${Colors.black};
     border: 2px solid ${Colors.black};
     border-radius: 50%;
-    margin: 0 7px;
+    margin-left: 7px;
     appearance: none;
     -webkit-appearance: none;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     :before {
       content: '';
@@ -185,11 +191,14 @@ export const AnswerContainer = styled.div`
     }
   }
 
-  h3 {
+  label {
     font-size: 14px;
     line-height: 18px;
     font-weight: normal;
     color: ${Colors.black};
+    padding-left: 7px;
+    cursor: pointer;
+    user-select: none;
   }
 
   svg {
@@ -197,5 +206,6 @@ export const AnswerContainer = styled.div`
     height: 24px;
     color: ${Colors.pink};
     margin-left: auto;
+    cursor: pointer;
   }
 `;
