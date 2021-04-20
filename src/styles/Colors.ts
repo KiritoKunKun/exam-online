@@ -5,6 +5,7 @@ export const Colors = {
   darkGray: '#595959',
   lightGray: '#c4c4c4',
   extraLightGray: '#e8e8e8',
+  darkGrayOpacity: 'rgba(89, 89, 89, 0.6)',
   grayOpacity: 'rgba(196, 196, 196, 0.6)',
   black: '#000000',
   pink: '#FA558F',

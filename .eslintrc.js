@@ -33,6 +33,8 @@ module.exports = {
         depth: 3,
       },
     ],
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
     'no-undef': 'off',
     'import/prefer-default-export': 'off',
     'jsx-quotes': ['error', 'prefer-single'],

@@ -22,25 +22,6 @@ export const ExamHeader = styled.div`
     color: ${Colors.gray};
   }
 
-  div {
-    display: flex;
-    align-items: center;
-
-    svg {
-      width: 2.4rem;
-      height: 2.4rem;
-      color: ${Colors.pink};
-    }
-
-    h2 {
-      font-size: 1.6rem;
-      line-height: 14px;
-      font-weight: normal;
-      color: ${Colors.gray};
-      margin-left: 15px;
-    }
-  }
-
   button {
     display: flex;
     align-items: center;
@@ -70,6 +51,34 @@ export const ExamHeader = styled.div`
   }
 `;
 
+export const HeaderItemContainer = styled.div`
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: ${Colors.pink};
+    cursor: pointer;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+    line-height: 14px;
+    font-weight: normal;
+    color: ${Colors.gray};
+    margin-left: 15px;
+  }
+`;
+
+export const TimePlaceholder = styled.div`
+  background-color: ${Colors.basicWhite};
+  width: 62px;
+  height: 14px;
+  margin-left: 15px;
+`;
+
 interface ProgressBarProps {
   percentage: number;
 }
@@ -96,6 +105,58 @@ export const InnerContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 25px 34px 35px 34px;
+  position: relative;
+`;
+
+export const QuestionsBookmarkContainer = styled.div`
+  position: absolute;
+  display: flex;
+  width: 284px;
+  padding: 12px;
+  background-color: ${Colors.white};
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  z-index: 1;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 37px);
+`;
+
+export const QuestionsBookmarkTopContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    line-height: 14px;
+    font-weight: normal;
+    color: ${Colors.lightGray};
+
+    b {
+      color: ${Colors.black};
+      font-weight: 700;
+    }
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: ${Colors.lightGray};
+    cursor: pointer;
+  }
+`;
+
+export const QuestionsMask = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: ${Colors.darkGrayOpacity};
 `;
 
 export const ExamContainer = styled.div`
@@ -146,12 +207,27 @@ export const QuestionContainer = styled.div`
   }
 `;
 
-export const AnswerContainer = styled.div`
+export const AnswersContainer = styled.div`
+  width: 100%;
+`;
+
+interface AnswerContainerProps {
+  selected: boolean;
+}
+
+export const AnswerContainer = styled.div<AnswerContainerProps>`
   display: flex;
   align-items: center;
   width: 100%;
   height: 54px;
   padding: 0 9px 0 6px;
+  position: relative;
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    `}
 
   h3 {
     font-size: 14px;
@@ -207,5 +283,41 @@ export const AnswerContainer = styled.div`
     color: ${Colors.pink};
     margin-left: auto;
     cursor: pointer;
+  }
+`;
+
+export const AnswerOptionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${Colors.white};
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(3px, -50%);
+
+  div {
+    display: flex;
+    align-items: center;
+    width: 190px;
+    height: 44px;
+    padding: 0 12px;
+    cursor: pointer;
+
+    :hover {
+      background-color: ${Colors.grayOpacity};
+    }
+
+    h3 {
+      font-size: 14px;
+      line-height: 14px;
+      font-weight: normal;
+      color: ${Colors.gray};
+      user-select: none;
+    }
+
+    & + div {
+      border-top: 0.5px solid ${Colors.gray};
+    }
   }
 `;

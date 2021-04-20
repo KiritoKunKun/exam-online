@@ -27,7 +27,15 @@ export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
       : `Simulado Enem ${new Date(student.event.date).getFullYear()}`;
 
   return (
-    <Container disabled={disabled} onClick={() => history.push('/prova')}>
+    <Container
+      disabled={disabled}
+      onClick={() =>
+        history.push('/prova', {
+          student,
+          proof,
+        })
+      }
+    >
       <div>
         <mark>{title}</mark>
         <h3>{student.exam.description}</h3>
