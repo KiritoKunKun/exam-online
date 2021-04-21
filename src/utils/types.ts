@@ -20,20 +20,26 @@ export interface Exam {
   data?: ExamData;
 }
 
-// [questionId]: answerId
+interface Question {
+  question: string;
+  image: string;
+  answers: Answer[];
+}
+
 export interface Answer {
-  [questonId: string]: string;
+  id_question: string;
+  value: string;
 }
 
 export interface Proof {
   id: string;
   events: Event;
   exam: Exam;
+  questions: Question[];
 }
 
 export interface Student {
   id: string;
   event: Event;
   exam: Exam;
-  answers?: Answer;
 }

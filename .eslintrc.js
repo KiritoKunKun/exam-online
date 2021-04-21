@@ -24,15 +24,7 @@ module.exports = {
     'react/jsx-filename-extension': [0],
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
-    'jsx-a11y/label-has-associated-control': [
-      2,
-      {
-        labelComponents: ['CustomInputLabel'],
-        labelAttributes: ['label'],
-        controlComponents: ['CustomInput'],
-        depth: 3,
-      },
-    ],
+    'react/no-array-index-key': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'no-undef': 'off',

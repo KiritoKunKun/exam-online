@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useToast } from '../../hooks/Toast/ToastContext';
 import { Proof, Student } from '../../utils/types';
+import { getASCIIChar } from '../../utils/Utils';
 import {
   AnswerContainer,
   AnswerOptionsContainer,
@@ -33,18 +34,12 @@ interface ExamLocation {
   proof: Proof;
 }
 
-const ANSWERS = [
-  'um impedimento às transações comerciais em contexto internacional.',
-  'o desinteresse dos funcionários nos cursos oferecidos pelas empresas.',
-  'a necessidade de inserção de funcionários nativos no mercado de trabalho globalizado.',
-  'um contraste entre o ideal e o real sobre a comunicação em inglês no mundo empresarial.',
-];
-
 export const Exam = () => {
   const { state } = useLocation<ExamLocation>();
 
   const [showTime, setShowTime] = useState(true);
   const [showQuestions, setShowQuestions] = useState(false);
+  const [questionIndex] = useState(state.student.exam.data?.answeredItems || 0);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(-1);
   const [showAnswerOptionsIndex, setShowAnswerOptionsIndex] = useState(-1);
   const [bookmarked, setBookmarked] = useState(false);
@@ -113,7 +108,7 @@ export const Exam = () => {
 
         <ExamContainer>
           <BookmarkContainer>
-            <h2>1</h2>
+            <h2>{questionIndex + 1}</h2>
             {bookmarked ? (
               <BookmarkIcon onClick={toggleBookmark} />
             ) : (
@@ -124,42 +119,45 @@ export const Exam = () => {
           <QuestionContainer>
             <img
               alt='Imagem da questão'
-              src='https://s3-alpha-sig.figma.com/img/db97/9808/8028ff5718d7d120477560c330a5e21d?Expires=1619395200&Signature=XPu8TZitHZe3FIV3TwPX50y8teJt5ZgFtwk7PgsEpVT0dswP7piX-EFuO2g9rhSd3eXF4OUg84m917j~bTPbX3e7ctkIDoe8P-kGksCbq2YRQs0dbyDkkNEMWP4jCRID5I~HsugPJZnPpjbJSQrbamSnAn2HrsPzJsQeGpTX4xETUghdfhAz2vgdjf-MirybncqFnAgsyMWi5KDxEgdyTWeTMiD7-FagsMMLcWGj34tCxxTS3mUGvSSAOEULg---0HDszXIrvUF7ULUtW8KfJeAchvNtj7Vy-abYk7x7VUKJ3UPGQVEDy9IzVLfa-9EiBe9PpfsSOzTKyPvos0ya4g__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA'
+              src={state.proof.questions[questionIndex].image}
             />
 
-            <p>
-              O infográfico aborda a importância do inglês para os negócios.
-              Nesse texto, as expressões but e yet only evidenciam
-            </p>
+            <p>{state.proof.questions[questionIndex].question}</p>
 
             <AnswersContainer>
-              {ANSWERS.map((answer, index) => (
-                <AnswerContainer selected={selectedAnswerIndex === index}>
-                  <h3>A</h3>
-                  <input
-                    id='A'
-                    type='radio'
-                    name='answer'
-                    value='A'
-                    onSelect={() => setSelectedAnswerIndex(index)}
-                  />
-                  <label htmlFor='A'>{answer}</label>
-                  <MoreHorizSharpIcon
-                    onClick={() => setShowAnswerOptionsIndex(index)}
-                  />
+              {state.proof.questions[questionIndex].answers.map(
+                (answer, index) => (
+                  <AnswerContainer
+                    key={`answer-${index}`}
+                    selected={selectedAnswerIndex === index}
+                  >
+                    <h3>{getASCIIChar(index)}</h3>
+                    <input
+                      id={getASCIIChar(index)}
+                      value={getASCIIChar(index)}
+                      name='answer'
+                      type='radio'
+                      checked={selectedAnswerIndex === index}
+                      onFocus={() => setSelectedAnswerIndex(index)}
+                    />
+                    <label htmlFor={getASCIIChar(index)}>{answer.value}</label>
+                    <MoreHorizSharpIcon
+                      onClick={() => setShowAnswerOptionsIndex(index)}
+                    />
 
-                  {showAnswerOptionsIndex === index && (
-                    <AnswerOptionsContainer>
-                      <div onClick={() => setSelectedAnswerIndex(-1)}>
-                        <h3>Desmarcar esta opção</h3>
-                      </div>
-                      <div>
-                        <h3>Desconsiderar esta opção</h3>
-                      </div>
-                    </AnswerOptionsContainer>
-                  )}
-                </AnswerContainer>
-              ))}
+                    {showAnswerOptionsIndex === index && (
+                      <AnswerOptionsContainer>
+                        <div onClick={() => setSelectedAnswerIndex(-1)}>
+                          <h3>Desmarcar esta opção</h3>
+                        </div>
+                        <div>
+                          <h3>Desconsiderar esta opção</h3>
+                        </div>
+                      </AnswerOptionsContainer>
+                    )}
+                  </AnswerContainer>
+                )
+              )}
             </AnswersContainer>
           </QuestionContainer>
         </ExamContainer>
