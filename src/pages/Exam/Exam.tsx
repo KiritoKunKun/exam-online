@@ -142,6 +142,8 @@ export const Exam = () => {
             <AnswersContainer>
               {proof.questions[questionIndex].answers.map((answer, index) => (
                 <div key={`answer-${index}`}>
+                  {shouldShowOptions(index) && <OptionsMask />}
+
                   <AnswerContainer
                     selected={isAnswerSelected(index)}
                     disabled={isAnswerDisabled(index)}
@@ -200,8 +202,6 @@ export const Exam = () => {
                       </AnswerOptionsContainer>
                     )}
                   </AnswerContainer>
-
-                  {shouldShowOptions(index) && <OptionsMask />}
                 </div>
               ))}
             </AnswersContainer>
