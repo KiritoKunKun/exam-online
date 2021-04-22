@@ -2,6 +2,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import { useEffect, useState } from 'react';
 import { ExamCard } from '../../components/ExamCard/ExamCard';
 import { ResultCard } from '../../components/ResultCard/ResultCard';
+import { useToast } from '../../hooks/Toast/ToastContext';
 import { api } from '../../services/api';
 import { Proof, Student } from '../../utils/types';
 import {
@@ -23,13 +24,15 @@ export const Dashboard = () => {
   const [proofs, setProofs] = useState<Proof[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
 
+  const { addToast } = useToast();
+
   const loadProofs = async () => {
     try {
       const { data } = await api.get('/proofs');
 
       setProofs(data);
     } catch (error) {
-      console.log(error);
+      addToast('Ocorreu um erro ao carregar as provas');
     }
   };
 
@@ -39,7 +42,7 @@ export const Dashboard = () => {
 
       setStudents(data);
     } catch (error) {
-      console.log(error);
+      addToast('Ocorreu um erro ao carregar seus dados');
     }
   };
 
@@ -89,7 +92,7 @@ export const Dashboard = () => {
         <ResultsContainer>
           <ResultsTitleContainer>
             <Subtitle>Seus resultados (6)</Subtitle>
-            <a href='/results'>Ver todos</a>
+            <a href='/resultados'>Ver todos</a>
           </ResultsTitleContainer>
 
           <ResultsGrid>

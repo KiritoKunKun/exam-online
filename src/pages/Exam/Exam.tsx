@@ -1,13 +1,11 @@
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import BookmarkBorderSharpIcon from '@material-ui/icons/BookmarkBorderSharp';
-import CloseIcon from '@material-ui/icons/Close';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MoreHorizSharpIcon from '@material-ui/icons/MoreHorizSharp';
-import SendIcon from '@material-ui/icons/Send';
-import ViewModuleSharpIcon from '@material-ui/icons/ViewModuleSharp';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { ExamHeader } from '../../components/ExamHeader/ExamHeader';
 import { useToast } from '../../hooks/Toast/ToastContext';
 import { Proof, Student } from '../../utils/types';
 import { getASCIIChar } from '../../utils/Utils';
@@ -18,15 +16,11 @@ import {
   BookmarkContainer,
   Container,
   ExamContainer,
-  ExamHeader,
-  HeaderItemContainer,
+  FooterButtonsContainer,
   InnerContainer,
   ProgressBar,
   QuestionContainer,
-  QuestionsBookmarkContainer,
-  QuestionsBookmarkTopContainer,
   QuestionsMask,
-  TimePlaceholder,
 } from './ExamStyle';
 
 interface ExamLocation {
@@ -37,67 +31,84 @@ interface ExamLocation {
 export const Exam = () => {
   const { state } = useLocation<ExamLocation>();
 
-  const [showTime, setShowTime] = useState(true);
-  const [showQuestions, setShowQuestions] = useState(false);
-  const [questionIndex] = useState(state.student.exam.data?.answeredItems || 0);
-  const [selectedAnswerIndex, setSelectedAnswerIndex] = useState(-1);
+  const [student] = useState<Student>(state.student);
+  const [proof, setProof] = useState<Proof>(state.proof);
+  const [showQuestions] = useState(false);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [showAnswerOptionsIndex, setShowAnswerOptionsIndex] = useState(-1);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [selectedAnswers, setSelectedAnswers] = useState(
+    proof.questions.map(() => -1)
+  );
+
+  const optionsIconRef = useRef<SVGSVGElement>(null);
+  const optionsBoxRef = useRef<HTMLDivElement>(null);
 
   const { addToast } = useToast();
 
-  const toggleBookmark = () => {
-    setBookmarked(!bookmarked);
+  const toggleBookmarkQuestion = () => {
+    const newProof = proof;
+
+    const bookmarked = !!proof.questions[questionIndex].bookmarked;
+    proof.questions[questionIndex].bookmarked = !bookmarked;
+
+    setProof({ ...newProof });
 
     if (!bookmarked) {
       addToast('Marcada para revisar mais tarde');
     }
   };
 
-  const formatNumberToTime = (seconds: number) =>
-    new Date(seconds * 1000).toISOString().substr(11, 8);
+  const selectAnswer = (index: number) => {
+    const arr = selectedAnswers;
+    arr[questionIndex] = index;
+    setSelectedAnswers([...selectedAnswers]);
+  };
+
+  const isAnswerSelected = (index: number) =>
+    selectedAnswers[questionIndex] === index;
+
+  const isAnswerDisabled = (index: number) =>
+    !!proof.questions[questionIndex].answers[index].disabled;
+
+  const toggleDisableAnswer = (index: number) => {
+    const newProof = proof;
+
+    newProof.questions[questionIndex].answers[
+      index
+    ].disabled = !isAnswerDisabled(index);
+
+    setProof({ ...newProof });
+    setShowAnswerOptionsIndex(-1);
+
+    if (!isAnswerDisabled(index) && isAnswerSelected(index)) {
+      selectAnswer(-1);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutsideOptions = (event: any) => {
+      if (
+        !optionsIconRef.current?.contains(event.target) &&
+        !optionsBoxRef.current?.contains(event.target)
+      ) {
+        setShowAnswerOptionsIndex(-1);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutsideOptions);
+
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutsideOptions);
+  }, [optionsIconRef]);
 
   return (
     <Container>
-      <ExamHeader>
-        <h1>{state.proof.exam.description}</h1>
-
-        <HeaderItemContainer>
-          {showTime ? (
-            <VisibilityOffIcon onClick={() => setShowTime(false)} />
-          ) : (
-            <VisibilityIcon onClick={() => setShowTime(true)} />
-          )}
-          {showTime ? (
-            <h2>{formatNumberToTime(state.student.event.limitTime || 0)}</h2>
-          ) : (
-            <TimePlaceholder />
-          )}
-        </HeaderItemContainer>
-
-        <HeaderItemContainer>
-          <ViewModuleSharpIcon
-            onClick={() => setShowQuestions(!showQuestions)}
-          />
-          <h2>Questões</h2>
-
-          {showQuestions && (
-            <QuestionsBookmarkContainer>
-              <QuestionsBookmarkTopContainer>
-                <h2>
-                  <b>20</b>/45
-                </h2>
-                <CloseIcon />
-              </QuestionsBookmarkTopContainer>
-            </QuestionsBookmarkContainer>
-          )}
-        </HeaderItemContainer>
-
-        <button type='button'>
-          <h2>Entregar prova</h2>
-          <SendIcon />
-        </button>
-      </ExamHeader>
+      <ExamHeader
+        proof={proof}
+        student={student}
+        questionIndex={questionIndex}
+        onSelectQuestion={setQuestionIndex}
+      />
 
       <ProgressBar percentage={45}>
         <div />
@@ -109,56 +120,92 @@ export const Exam = () => {
         <ExamContainer>
           <BookmarkContainer>
             <h2>{questionIndex + 1}</h2>
-            {bookmarked ? (
-              <BookmarkIcon onClick={toggleBookmark} />
+            {proof.questions[questionIndex].bookmarked ? (
+              <BookmarkIcon onClick={toggleBookmarkQuestion} />
             ) : (
-              <BookmarkBorderSharpIcon onClick={toggleBookmark} />
+              <BookmarkBorderSharpIcon onClick={toggleBookmarkQuestion} />
             )}
           </BookmarkContainer>
 
           <QuestionContainer>
             <img
               alt='Imagem da questão'
-              src={state.proof.questions[questionIndex].image}
+              src={proof.questions[questionIndex].image}
             />
 
-            <p>{state.proof.questions[questionIndex].question}</p>
+            <p>{proof.questions[questionIndex].question}</p>
 
             <AnswersContainer>
-              {state.proof.questions[questionIndex].answers.map(
-                (answer, index) => (
-                  <AnswerContainer
-                    key={`answer-${index}`}
-                    selected={selectedAnswerIndex === index}
-                  >
-                    <h3>{getASCIIChar(index)}</h3>
-                    <input
-                      id={getASCIIChar(index)}
-                      value={getASCIIChar(index)}
-                      name='answer'
-                      type='radio'
-                      checked={selectedAnswerIndex === index}
-                      onFocus={() => setSelectedAnswerIndex(index)}
-                    />
-                    <label htmlFor={getASCIIChar(index)}>{answer.value}</label>
-                    <MoreHorizSharpIcon
-                      onClick={() => setShowAnswerOptionsIndex(index)}
-                    />
+              {proof.questions[questionIndex].answers.map((answer, index) => (
+                <AnswerContainer
+                  key={`answer-${index}`}
+                  selected={isAnswerSelected(index)}
+                  disabled={isAnswerDisabled(index)}
+                >
+                  <h3>{getASCIIChar(index)}</h3>
+                  <input
+                    type='radio'
+                    name='answer'
+                    id={getASCIIChar(index)}
+                    value={getASCIIChar(index)}
+                    checked={isAnswerSelected(index)}
+                    disabled={isAnswerDisabled(index)}
+                    onFocus={() => selectAnswer(index)}
+                  />
+                  <label htmlFor={getASCIIChar(index)}>{answer.value}</label>
+                  <MoreHorizSharpIcon
+                    ref={optionsIconRef}
+                    onClick={() => setShowAnswerOptionsIndex(index)}
+                  />
 
-                    {showAnswerOptionsIndex === index && (
-                      <AnswerOptionsContainer>
-                        <div onClick={() => setSelectedAnswerIndex(-1)}>
+                  {showAnswerOptionsIndex === index && (
+                    <AnswerOptionsContainer ref={optionsBoxRef}>
+                      {isAnswerSelected(index) && (
+                        <div
+                          onClick={() => {
+                            selectAnswer(-1);
+                            setShowAnswerOptionsIndex(-1);
+                          }}
+                        >
                           <h3>Desmarcar esta opção</h3>
                         </div>
-                        <div>
-                          <h3>Desconsiderar esta opção</h3>
-                        </div>
-                      </AnswerOptionsContainer>
-                    )}
-                  </AnswerContainer>
-                )
-              )}
+                      )}
+
+                      <div onClick={() => toggleDisableAnswer(index)}>
+                        <h3>
+                          {isAnswerDisabled(index)
+                            ? 'Considerar esta opção'
+                            : 'Desconsiderar esta opção'}
+                        </h3>
+                      </div>
+                    </AnswerOptionsContainer>
+                  )}
+                </AnswerContainer>
+              ))}
             </AnswersContainer>
+
+            <FooterButtonsContainer>
+              <button
+                type='button'
+                onClick={() =>
+                  questionIndex > 0 && setQuestionIndex(questionIndex - 1)
+                }
+              >
+                <ChevronLeftIcon />
+                <h2>Anterior</h2>
+              </button>
+
+              <button
+                type='button'
+                onClick={() =>
+                  questionIndex < proof.questions.length - 1 &&
+                  setQuestionIndex(questionIndex + 1)
+                }
+              >
+                <h2>Próximo</h2>
+                <ChevronRightIcon />
+              </button>
+            </FooterButtonsContainer>
           </QuestionContainer>
         </ExamContainer>
       </InnerContainer>

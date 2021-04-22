@@ -1,8 +1,14 @@
 import ViewModuleSharpIcon from '@material-ui/icons/ViewModuleSharp';
 import WatchLaterSharp from '@material-ui/icons/WatchLaterSharp';
+import { formatToDate } from 'brazilian-values';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Proof, Student } from '../../utils/types';
+import {
+  formatNumberToTime,
+  isDateAfterToday,
+  isDateBeforeToday,
+} from '../../utils/Utils';
 import {
   Container,
   DateText,
@@ -19,7 +25,9 @@ interface ExamCardProps {
 export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
   const history = useHistory();
 
-  const disabled = !proof.id; // TODO
+  const disabled =
+    isDateBeforeToday(new Date(proof.events.limitDate)) ||
+    isDateAfterToday(new Date(proof.events.date));
 
   const title =
     student.exam.type === 'EXAM'
@@ -51,7 +59,7 @@ export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
         <InformationsContainer>
           <div>
             <WatchLaterSharp />
-            <h4>00:20:45</h4>
+            <h4>{formatNumberToTime(student.event.limitTime || 0)}</h4>
           </div>
 
           <div>
@@ -60,7 +68,9 @@ export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
           </div>
         </InformationsContainer>
 
-        <DateText>De 20/12/20 à 20/01/21</DateText>
+        <DateText>{`De ${formatToDate(
+          new Date(proof.events.date)
+        )} à ${formatToDate(new Date(proof.events.limitDate))}`}</DateText>
       </div>
 
       {disabled && <DisabledMask />}

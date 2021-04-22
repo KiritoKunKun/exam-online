@@ -6,79 +6,6 @@ export const Container = styled.div`
   height: 100%;
 `;
 
-export const ExamHeader = styled.div`
-  display: flex;
-  width: 100%;
-  height: 76px;
-  padding: 0 35px;
-  align-items: center;
-  justify-content: space-between;
-  background-color: ${Colors.white};
-
-  h1 {
-    font-size: 2rem;
-    line-height: 2.8rem;
-    font-weight: 700;
-    color: ${Colors.gray};
-  }
-
-  button {
-    display: flex;
-    align-items: center;
-    width: 172px;
-    height: 32px;
-    padding: 0 8px;
-    border: 1px solid ${Colors.pink};
-    border-radius: 2px;
-    background-color: ${Colors.white};
-    cursor: pointer;
-
-    h2 {
-      font-size: 14px;
-      line-height: 16px;
-      font-weight: 700;
-      color: ${Colors.pink};
-      margin-left: auto;
-      user-select: none;
-    }
-
-    svg {
-      width: 20px;
-      height: 20px;
-      color: ${Colors.pink};
-      margin-left: 10px;
-    }
-  }
-`;
-
-export const HeaderItemContainer = styled.div`
-  display: flex;
-  align-items: center;
-  position: relative;
-
-  svg {
-    width: 2.4rem;
-    height: 2.4rem;
-    color: ${Colors.pink};
-    cursor: pointer;
-  }
-
-  h2 {
-    font-size: 1.6rem;
-    line-height: 14px;
-    font-weight: normal;
-    color: ${Colors.gray};
-    margin-left: 15px;
-  }
-`;
-
-export const TimePlaceholder = styled.div`
-  background-color: ${Colors.basicWhite};
-  width: 62px;
-  height: 14px;
-  margin-left: 15px;
-`;
-
 interface ProgressBarProps {
   percentage: number;
 }
@@ -106,48 +33,6 @@ export const InnerContainer = styled.div`
   height: 100%;
   padding: 25px 34px 35px 34px;
   position: relative;
-`;
-
-export const QuestionsBookmarkContainer = styled.div`
-  position: absolute;
-  display: flex;
-  width: 284px;
-  padding: 12px;
-  background-color: ${Colors.white};
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
-  z-index: 1;
-  left: 50%;
-  top: 100%;
-  transform: translate(-50%, 37px);
-`;
-
-export const QuestionsBookmarkTopContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: fit-content;
-  align-items: center;
-  justify-content: space-between;
-
-  h2 {
-    width: 100%;
-    text-align: center;
-    font-size: 16px;
-    line-height: 14px;
-    font-weight: normal;
-    color: ${Colors.lightGray};
-
-    b {
-      color: ${Colors.black};
-      font-weight: 700;
-    }
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-    color: ${Colors.lightGray};
-    cursor: pointer;
-  }
 `;
 
 export const QuestionsMask = styled.div`
@@ -213,6 +98,7 @@ export const AnswersContainer = styled.div`
 
 interface AnswerContainerProps {
   selected: boolean;
+  disabled: boolean;
 }
 
 export const AnswerContainer = styled.div<AnswerContainerProps>`
@@ -284,6 +170,24 @@ export const AnswerContainer = styled.div<AnswerContainerProps>`
     margin-left: auto;
     cursor: pointer;
   }
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      h3 {
+        color: ${Colors.gray};
+      }
+
+      input[type='radio'] {
+        color: ${Colors.gray};
+        border-color: ${Colors.gray};
+      }
+
+      label {
+        color: ${Colors.gray};
+        text-decoration: line-through solid ${Colors.gray};
+      }
+    `}
 `;
 
 export const AnswerOptionsContainer = styled.div`
@@ -318,6 +222,54 @@ export const AnswerOptionsContainer = styled.div`
 
     & + div {
       border-top: 0.5px solid ${Colors.gray};
+    }
+  }
+`;
+
+export const FooterButtonsContainer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 61px;
+
+  button {
+    display: flex;
+    width: 112px;
+    height: 32px;
+    align-items: center;
+    border: 1px solid ${Colors.pink};
+    border-radius: 2px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      color: ${Colors.pink};
+    }
+
+    h2 {
+      font-size: 14px;
+      line-height: 16px;
+      font-weight: normal;
+      color: ${Colors.pink};
+      margin-left: 8px;
+      user-select: none;
+    }
+
+    & + button {
+      margin-left: 20px;
+      border: none;
+      background-color: ${Colors.pink};
+
+      h2 {
+        color: ${Colors.white};
+        margin: 0 8px 0 auto;
+      }
+
+      svg {
+        color: ${Colors.white};
+      }
     }
   }
 `;

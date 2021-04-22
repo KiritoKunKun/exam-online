@@ -24,11 +24,14 @@ interface Question {
   question: string;
   image: string;
   answers: Answer[];
+  answer?: number;
+  bookmarked?: boolean;
 }
 
 export interface Answer {
   id_question: string;
   value: string;
+  disabled?: boolean;
 }
 
 export interface Proof {
