@@ -4,7 +4,8 @@ import { ExamCard } from '../../components/ExamCard/ExamCard';
 import { ResultCard } from '../../components/ResultCard/ResultCard';
 import { useToast } from '../../hooks/Toast/ToastContext';
 import { api } from '../../services/api';
-import { Proof, Student } from '../../utils/types';
+import { Colors } from '../../styles/Colors';
+import { Proof, Result, Student } from '../../utils/types';
 import {
   ArrowContainer,
   Container,
@@ -20,9 +21,49 @@ import {
   Title,
 } from './DashboardStyle';
 
+const results: Result[] = [
+  {
+    color: Colors.darkOrange,
+    label: 'Simulado Enem 2020',
+    title: 'Linguagens e Códigos',
+    deliveryDate: new Date(2020, 12, 12),
+    time: 1860,
+    rightQuestions: 36,
+    totalQuestions: 45,
+  },
+  {
+    color: Colors.blue,
+    label: 'Avaliação trimestral 20.3',
+    title: 'Biologia',
+    deliveryDate: new Date(2020, 11, 27),
+    time: 1800,
+    rightQuestions: 3,
+    totalQuestions: 10,
+  },
+  {
+    color: Colors.blue,
+    label: 'Avaliação trimestral 20.3',
+    title: 'Química',
+    deliveryDate: new Date(2020, 11, 27),
+    time: 2400,
+    rightQuestions: 5,
+    totalQuestions: 10,
+  },
+  {
+    color: Colors.purple,
+    label: 'Simulado Enem 2019',
+    title: 'Ciências Humanas',
+    deliveryDate: new Date(2019, 12, 19),
+    time: 2580,
+    rightQuestions: 31,
+    totalQuestions: 45,
+  },
+];
+
 export const Dashboard = () => {
-  const [proofs, setProofs] = useState<Proof[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [proofsInProgress, setProofsInProgress] = useState<Proof[]>([]);
+  const [nextProofs, setNextProofs] = useState<Proof[]>([]);
 
   const { addToast } = useToast();
 
@@ -30,7 +71,8 @@ export const Dashboard = () => {
     try {
       const { data } = await api.get('/proofs');
 
-      setProofs(data);
+      setProofsInProgress([data[0], data[1], data[2]]);
+      setNextProofs([data[3], data[4]]);
     } catch (error) {
       addToast('Ocorreu um erro ao carregar as provas');
     }
@@ -57,19 +99,23 @@ export const Dashboard = () => {
 
       <GridContainer>
         <ExamsContainer>
-          <Subtitle>Provas em progresso (4)</Subtitle>
+          <Subtitle>{`Provas em progresso (${proofsInProgress.length})`}</Subtitle>
 
           <ExamsInnerContainer>
             <ExamsGrid>
-              {students.map(student => (
-                <ExamCard
-                  key={student.id}
-                  student={student}
-                  proof={
-                    proofs.filter(proof => proof.id === student.event.id)[0]
-                  }
-                />
-              ))}
+              {!!students.length &&
+                proofsInProgress.map(proof => (
+                  <ExamCard
+                    key={proof.id}
+                    student={
+                      students.filter(
+                        student => student.event.id === proof.id
+                      )[0]
+                    }
+                    proof={proof}
+                    showProgressBar
+                  />
+                ))}
             </ExamsGrid>
 
             <ArrowContainer>
@@ -80,26 +126,42 @@ export const Dashboard = () => {
 
         <NextExams>
           <ExamsContainer>
-            <Subtitle>Próximas provas (2)</Subtitle>
+            <Subtitle>{`Próximas provas (${nextProofs.length})`}</Subtitle>
 
-            <ExamsGrid>
-              {/* <ExamCard />
-              <ExamCard /> */}
-            </ExamsGrid>
+            <ExamsInnerContainer>
+              <ExamsGrid>
+                {!!students.length &&
+                  nextProofs.map(proof => (
+                    <ExamCard
+                      key={proof.id}
+                      student={
+                        students.filter(
+                          student => student.event.id === proof.id
+                        )[0]
+                      }
+                      proof={proof}
+                      showProgressBar={false}
+                    />
+                  ))}
+              </ExamsGrid>
+
+              <ArrowContainer>
+                <ArrowForwardIosIcon />
+              </ArrowContainer>
+            </ExamsInnerContainer>
           </ExamsContainer>
         </NextExams>
 
         <ResultsContainer>
           <ResultsTitleContainer>
-            <Subtitle>Seus resultados (6)</Subtitle>
+            <Subtitle>{`Seus resultados (${results.length})`}</Subtitle>
             <a href='/resultados'>Ver todos</a>
           </ResultsTitleContainer>
 
           <ResultsGrid>
-            <ResultCard />
-            <ResultCard />
-            <ResultCard />
-            <ResultCard />
+            {results.map((result, index) => (
+              <ResultCard key={`result-${index}`} result={result} />
+            ))}
           </ResultsGrid>
         </ResultsContainer>
       </GridContainer>

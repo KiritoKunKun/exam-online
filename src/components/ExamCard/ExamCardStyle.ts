@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { Colors } from '../../styles/Colors';
 
 interface ContainerProps {
+  labelColor: string;
   disabled?: boolean;
 }
 
@@ -29,10 +30,13 @@ export const Container = styled.div<ContainerProps>`
     line-height: 16px;
     font-weight: normal;
     color: ${Colors.white};
-    background-color: ${Colors.orange};
     padding: 2px 6px;
     border-radius: 2px;
     user-select: none;
+
+    ${({ labelColor }) => css`
+      background-color: ${labelColor};
+    `}
   }
 
   h3 {

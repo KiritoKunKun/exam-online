@@ -16,6 +16,11 @@ export const Container = styled.div`
     font-weight: 700;
     color: ${Colors.gray};
   }
+
+  @media (max-width: 1200px) {
+    height: 42px;
+    padding: 0 16px;
+  }
 `;
 
 export const HeaderItemContainer = styled.div`
@@ -24,18 +29,32 @@ export const HeaderItemContainer = styled.div`
   position: relative;
 
   svg {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 24px;
+    height: 24px;
     color: ${Colors.pink};
     cursor: pointer;
   }
 
   h2 {
-    font-size: 1.6rem;
+    font-size: 16px;
     line-height: 14px;
     font-weight: normal;
     color: ${Colors.gray};
     margin-left: 15px;
+  }
+
+  @media (max-width: 1200px) {
+    position: static;
+
+    h2 {
+      font-size: 14px;
+      margin-left: 5px;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 
@@ -44,6 +63,10 @@ export const TimePlaceholder = styled.div`
   width: 62px;
   height: 14px;
   margin-left: 15px;
+
+  @media (max-width: 1200px) {
+    width: 44px;
+  }
 `;
 
 export const QuestionsBookmarkContainer = styled.div`
@@ -58,6 +81,12 @@ export const QuestionsBookmarkContainer = styled.div`
   left: 50%;
   top: 100%;
   transform: translate(-50%, 37px);
+
+  @media (max-width: 1200px) {
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 99px);
+  }
 `;
 
 export const QuestionsBookmarkTopContainer = styled.div`
@@ -167,5 +196,19 @@ export const SendExamButton = styled.button`
     height: 20px;
     color: ${Colors.pink};
     margin-left: 10px;
+  }
+
+  @media (max-width: 1200px) {
+    width: 20px;
+    height: 20px;
+    border: none;
+
+    h2 {
+      display: none;
+    }
+
+    svg {
+      margin-left: 0;
+    }
   }
 `;

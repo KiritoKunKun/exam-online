@@ -6,4 +6,8 @@ export const Container = styled.div`
   left: 50%;
   transform: translate(-50%, 182px);
   overflow: hidden;
+
+  @media (max-width: 1200px) {
+    transform: translate(-50%, 100px);
+  }
 `;

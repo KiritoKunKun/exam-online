@@ -5,6 +5,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MoreHorizSharpIcon from '@material-ui/icons/MoreHorizSharp';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useLongPress } from 'use-long-press';
 import { ExamHeader } from '../../components/ExamHeader/ExamHeader';
 import { useToast } from '../../hooks/Toast/ToastContext';
 import { Proof, Student } from '../../utils/types';
@@ -18,6 +19,7 @@ import {
   ExamContainer,
   FooterButtonsContainer,
   InnerContainer,
+  OptionsMask,
   ProgressBar,
   QuestionContainer,
   QuestionsMask,
@@ -33,12 +35,13 @@ export const Exam = () => {
 
   const [student] = useState<Student>(state.student);
   const [proof, setProof] = useState<Proof>(state.proof);
-  const [showQuestions] = useState(false);
+  const [showQuestions, setShowQuestions] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [showAnswerOptionsIndex, setShowAnswerOptionsIndex] = useState(-1);
   const [selectedAnswers, setSelectedAnswers] = useState(
     proof.questions.map(() => -1)
   );
+  const [holdedAnswer, setHoldedAnswer] = useState(-1);
 
   const optionsIconRef = useRef<SVGSVGElement>(null);
   const optionsBoxRef = useRef<HTMLDivElement>(null);
@@ -80,10 +83,14 @@ export const Exam = () => {
     setProof({ ...newProof });
     setShowAnswerOptionsIndex(-1);
 
-    if (!isAnswerDisabled(index) && isAnswerSelected(index)) {
+    if (isAnswerSelected(index)) {
       selectAnswer(-1);
     }
   };
+
+  const longPressBind = useLongPress(() => {
+    setShowAnswerOptionsIndex(holdedAnswer);
+  });
 
   useEffect(() => {
     const handleClickOutsideOptions = (event: any) => {
@@ -108,6 +115,7 @@ export const Exam = () => {
         student={student}
         questionIndex={questionIndex}
         onSelectQuestion={setQuestionIndex}
+        onToggleQuestions={setShowQuestions}
       />
 
       <ProgressBar percentage={45}>
@@ -137,50 +145,65 @@ export const Exam = () => {
 
             <AnswersContainer>
               {proof.questions[questionIndex].answers.map((answer, index) => (
-                <AnswerContainer
-                  key={`answer-${index}`}
-                  selected={isAnswerSelected(index)}
-                  disabled={isAnswerDisabled(index)}
-                >
-                  <h3>{getASCIIChar(index)}</h3>
-                  <input
-                    type='radio'
-                    name='answer'
-                    id={getASCIIChar(index)}
-                    value={getASCIIChar(index)}
-                    checked={isAnswerSelected(index)}
+                <div key={`answer-${index}`}>
+                  {showAnswerOptionsIndex === index && <OptionsMask />}
+                  <AnswerContainer
+                    selected={isAnswerSelected(index)}
                     disabled={isAnswerDisabled(index)}
-                    onFocus={() => selectAnswer(index)}
-                  />
-                  <label htmlFor={getASCIIChar(index)}>{answer.value}</label>
-                  <MoreHorizSharpIcon
-                    ref={optionsIconRef}
-                    onClick={() => setShowAnswerOptionsIndex(index)}
-                  />
+                    highlighted={holdedAnswer === index}
+                    onMouseDown={event => {
+                      setHoldedAnswer(index);
+                      longPressBind.onMouseDown(event);
+                    }}
+                    onMouseUp={longPressBind.onMouseUp}
+                    onTouchStart={event => {
+                      setHoldedAnswer(index);
+                      longPressBind.onTouchStart(event);
+                    }}
+                    onTouchEnd={longPressBind.onTouchEnd}
+                    onMouseLeave={() => {}}
+                  >
+                    <h3>{getASCIIChar(index)}</h3>
+                    <input
+                      type='radio'
+                      name='answer'
+                      id={getASCIIChar(index)}
+                      value={getASCIIChar(index)}
+                      checked={isAnswerSelected(index)}
+                      disabled={isAnswerDisabled(index)}
+                      onFocus={() => selectAnswer(index)}
+                      readOnly
+                    />
+                    <label htmlFor={getASCIIChar(index)}>{answer.value}</label>
+                    <MoreHorizSharpIcon
+                      ref={optionsIconRef}
+                      onClick={() => setShowAnswerOptionsIndex(index)}
+                    />
 
-                  {showAnswerOptionsIndex === index && (
-                    <AnswerOptionsContainer ref={optionsBoxRef}>
-                      {isAnswerSelected(index) && (
-                        <div
-                          onClick={() => {
-                            selectAnswer(-1);
-                            setShowAnswerOptionsIndex(-1);
-                          }}
-                        >
-                          <h3>Desmarcar esta opção</h3>
+                    {showAnswerOptionsIndex === index && (
+                      <AnswerOptionsContainer ref={optionsBoxRef}>
+                        {isAnswerSelected(index) && (
+                          <div
+                            onClick={() => {
+                              selectAnswer(-1);
+                              setShowAnswerOptionsIndex(-1);
+                            }}
+                          >
+                            <h3>Desmarcar esta opção</h3>
+                          </div>
+                        )}
+
+                        <div onClick={() => toggleDisableAnswer(index)}>
+                          <h3>
+                            {isAnswerDisabled(index)
+                              ? 'Considerar esta opção'
+                              : 'Desconsiderar esta opção'}
+                          </h3>
                         </div>
-                      )}
-
-                      <div onClick={() => toggleDisableAnswer(index)}>
-                        <h3>
-                          {isAnswerDisabled(index)
-                            ? 'Considerar esta opção'
-                            : 'Desconsiderar esta opção'}
-                        </h3>
-                      </div>
-                    </AnswerOptionsContainer>
-                  )}
-                </AnswerContainer>
+                      </AnswerOptionsContainer>
+                    )}
+                  </AnswerContainer>
+                </div>
               ))}
             </AnswersContainer>
 

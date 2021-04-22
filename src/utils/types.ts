@@ -34,6 +34,16 @@ export interface Answer {
   disabled?: boolean;
 }
 
+export interface Result {
+  label: string;
+  color: string;
+  title: string;
+  time: number;
+  deliveryDate: Date;
+  rightQuestions: number;
+  totalQuestions: number;
+}
+
 export interface Proof {
   id: string;
   events: Event;

@@ -65,13 +65,13 @@ export const ExamsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, 222px);
   grid-gap: 20px;
   height: 150px;
-  overflow: hidden;
   margin-top: 26px;
   align-items: center;
 
   @media (max-width: 1200px) {
     grid-auto-flow: column;
     grid-gap: 15px;
+    height: min-content;
     margin: 10px 0 0 -5px;
     padding: 5px;
     overflow: scroll;

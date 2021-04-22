@@ -17,7 +17,7 @@ export const ProgressBar = styled.div<ProgressBarProps>`
   background-color: ${Colors.gray};
 
   div {
-    height: 5px;
+    height: 100%;
     border-radius: 2px;
     background-color: ${Colors.pink};
 
@@ -26,6 +26,10 @@ export const ProgressBar = styled.div<ProgressBarProps>`
         width: ${percentage}%;
       `}
   }
+
+  @media (max-width: 1200px) {
+    height: 3px;
+  }
 `;
 
 export const InnerContainer = styled.div`
@@ -33,6 +37,10 @@ export const InnerContainer = styled.div`
   height: 100%;
   padding: 25px 34px 35px 34px;
   position: relative;
+
+  @media (max-width: 1200px) {
+    padding: 20px 17px 35px 17px;
+  }
 `;
 
 export const QuestionsMask = styled.div`
@@ -77,9 +85,12 @@ export const QuestionContainer = styled.div`
   height: 100%;
   margin: 11px auto 0 auto;
 
+  @media (max-width: 700px) {
+    width: 100%;
+  }
+
   img {
     width: 100%;
-    height: 320px;
     user-select: none;
   }
 
@@ -99,6 +110,7 @@ export const AnswersContainer = styled.div`
 interface AnswerContainerProps {
   selected: boolean;
   disabled: boolean;
+  highlighted: boolean;
 }
 
 export const AnswerContainer = styled.div<AnswerContainerProps>`
@@ -106,8 +118,21 @@ export const AnswerContainer = styled.div<AnswerContainerProps>`
   align-items: center;
   width: 100%;
   height: 54px;
+  border-radius: 2px;
   padding: 0 9px 0 6px;
   position: relative;
+
+  @media (max-width: 1200px) {
+    ${({ highlighted }) =>
+      highlighted &&
+      css`
+        background-color: ${Colors.white};
+      `}
+  }
+
+  @media (max-width: 700px) {
+    height: 90px;
+  }
 
   ${({ selected }) =>
     selected &&
@@ -161,6 +186,7 @@ export const AnswerContainer = styled.div<AnswerContainerProps>`
     padding-left: 7px;
     cursor: pointer;
     user-select: none;
+    width: 100%;
   }
 
   svg {
@@ -169,6 +195,10 @@ export const AnswerContainer = styled.div<AnswerContainerProps>`
     color: ${Colors.pink};
     margin-left: auto;
     cursor: pointer;
+
+    @media (max-width: 1200px) {
+      display: none;
+    }
   }
 
   ${({ disabled }) =>
@@ -200,6 +230,12 @@ export const AnswerOptionsContainer = styled.div`
   top: 50%;
   transform: translate(3px, -50%);
 
+  @media (max-width: 1200px) {
+    left: 100%;
+    top: -2px;
+    transform: translate(-100%, -100%);
+  }
+
   div {
     display: flex;
     align-items: center;
@@ -226,6 +262,20 @@ export const AnswerOptionsContainer = styled.div`
   }
 `;
 
+export const OptionsMask = styled.div`
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: ${Colors.darkGrayOpacity};
+
+  @media (max-width: 1200px) {
+    display: inline;
+  }
+`;
+
 export const FooterButtonsContainer = styled.div`
   display: flex;
   width: 100%;
@@ -238,6 +288,7 @@ export const FooterButtonsContainer = styled.div`
     width: 112px;
     height: 32px;
     align-items: center;
+    background-color: ${Colors.white};
     border: 1px solid ${Colors.pink};
     border-radius: 2px;
     cursor: pointer;

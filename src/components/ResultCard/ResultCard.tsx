@@ -1,5 +1,8 @@
+import { formatToDate } from 'brazilian-values';
+import React from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { Colors } from '../../styles/Colors';
+import { Result } from '../../utils/types';
 import {
   Container,
   InnerContainer,
@@ -7,18 +10,24 @@ import {
   ProgressDataContainer,
 } from './ResultCardStyle';
 
-export const ResultCard = () => {
-  const percentage = (36 / 45) * 100;
+interface ResultCardProps {
+  result: Result;
+}
+
+export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
+  const percentage = Math.floor(
+    (result.rightQuestions / result.totalQuestions) * 100
+  );
 
   return (
     <Container>
-      <InnerContainer>
-        <mark>Simulado Enem 2020</mark>
-        <h3>Linguagens e Códigos</h3>
+      <InnerContainer labelColor={result.color}>
+        <mark>{result.label}</mark>
+        <h3>{result.title}</h3>
 
         <div>
-          <h4>Realizada em 31min</h4>
-          <h5>Entregue em 12/12/20</h5>
+          <h4>{`Realizada em ${result.time / 60}min`}</h4>
+          <h5>{`Entregue em ${formatToDate(result.deliveryDate)}`}</h5>
         </div>
       </InnerContainer>
 
@@ -39,7 +48,7 @@ export const ResultCard = () => {
 
         <ProgressDataContainer>
           <strong>
-            <b>36</b>/45
+            <b>{result.rightQuestions}</b>/{result.totalQuestions}
           </strong>
 
           <h6>{`${percentage}%`}</h6>

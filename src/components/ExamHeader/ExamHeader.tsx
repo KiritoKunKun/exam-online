@@ -4,7 +4,8 @@ import SendIcon from '@material-ui/icons/Send';
 import ViewModuleSharpIcon from '@material-ui/icons/ViewModuleSharp';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Proof, Student } from '../../utils/types';
 import { formatNumberToTime } from '../../utils/Utils';
 import {
@@ -23,6 +24,7 @@ interface ExamHeaderProps {
   student: Student;
   questionIndex: number;
   onSelectQuestion: (index: number) => void;
+  onToggleQuestions: (active: boolean) => void;
 }
 
 export const ExamHeader: React.FC<ExamHeaderProps> = ({
@@ -30,17 +32,38 @@ export const ExamHeader: React.FC<ExamHeaderProps> = ({
   student,
   questionIndex,
   onSelectQuestion,
+  onToggleQuestions,
 }) => {
   const [showTime, setShowTime] = useState(true);
   const [showQuestions, setShowQuestions] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  const history = useHistory();
 
   const selectQuestion = (index: number) => {
     onSelectQuestion(index);
   };
 
+  const toggleQuestions = (active: boolean) => {
+    onToggleQuestions(active);
+    setShowQuestions(active);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', () => setScreenWidth(window.innerWidth));
+    return () =>
+      window.removeEventListener('resize', () =>
+        setScreenWidth(window.innerWidth)
+      );
+  }, []);
+
   return (
     <Container>
-      <h1>{proof.exam.description}</h1>
+      <h1>
+        {screenWidth < 540
+          ? proof.exam.name.split(' ')[0]
+          : proof.exam.description}
+      </h1>
 
       <HeaderItemContainer>
         {showTime ? (
@@ -56,7 +79,7 @@ export const ExamHeader: React.FC<ExamHeaderProps> = ({
       </HeaderItemContainer>
 
       <HeaderItemContainer>
-        <ViewModuleSharpIcon onClick={() => setShowQuestions(!showQuestions)} />
+        <ViewModuleSharpIcon onClick={() => toggleQuestions(!showQuestions)} />
         <h2>Questões</h2>
 
         {showQuestions && (
@@ -65,13 +88,14 @@ export const ExamHeader: React.FC<ExamHeaderProps> = ({
               <h2>
                 <b>{questionIndex + 1}</b>/45
               </h2>
-              <CloseIcon onClick={() => setShowQuestions(false)} />
+              <CloseIcon onClick={() => toggleQuestions(false)} />
             </QuestionsBookmarkTopContainer>
 
             <QuestionsBookmarkGrid>
               {proof.questions.map((question, index) => (
                 <QuestionsBookmarkButton
                   type='button'
+                  key={`question-${index}`}
                   bookmarked={!!question.bookmarked}
                   selected={questionIndex === index}
                   onClick={() => selectQuestion(index)}
@@ -85,7 +109,7 @@ export const ExamHeader: React.FC<ExamHeaderProps> = ({
         )}
       </HeaderItemContainer>
 
-      <SendExamButton type='button'>
+      <SendExamButton type='button' onClick={() => history.push('/')}>
         <h2>Entregar prova</h2>
         <SendIcon />
       </SendExamButton>

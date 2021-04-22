@@ -3,6 +3,7 @@ import WatchLaterSharp from '@material-ui/icons/WatchLaterSharp';
 import { formatToDate } from 'brazilian-values';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { Colors } from '../../styles/Colors';
 import { Proof, Student } from '../../utils/types';
 import {
   formatNumberToTime,
@@ -20,9 +21,14 @@ import {
 interface ExamCardProps {
   student: Student;
   proof: Proof;
+  showProgressBar: boolean;
 }
 
-export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
+export const ExamCard: React.FC<ExamCardProps> = ({
+  student,
+  proof,
+  showProgressBar,
+}) => {
   const history = useHistory();
 
   const disabled =
@@ -34,10 +40,14 @@ export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
       ? 'Avaliação trimestral 20.3'
       : `Simulado Enem ${new Date(student.event.date).getFullYear()}`;
 
+  const labelColor = student.exam.type === 'EXAM' ? Colors.blue : Colors.orange;
+
   return (
     <Container
+      labelColor={labelColor}
       disabled={disabled}
       onClick={() =>
+        !disabled &&
         history.push('/prova', {
           student,
           proof,
@@ -50,7 +60,7 @@ export const ExamCard: React.FC<ExamCardProps> = ({ student, proof }) => {
       </div>
 
       <div>
-        {!disabled && (
+        {showProgressBar && (
           <ProgressBar>
             <div />
           </ProgressBar>

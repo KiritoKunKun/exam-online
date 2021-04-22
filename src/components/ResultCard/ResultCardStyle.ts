@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Colors } from '../../styles/Colors';
 
 export const Container = styled.div`
@@ -13,7 +13,11 @@ export const Container = styled.div`
   cursor: pointer;
 `;
 
-export const InnerContainer = styled.div`
+interface InnerContainerProps {
+  labelColor: string;
+}
+
+export const InnerContainer = styled.div<InnerContainerProps>`
   height: 100%;
 
   mark {
@@ -21,10 +25,13 @@ export const InnerContainer = styled.div`
     line-height: 16px;
     font-weight: normal;
     color: ${Colors.white};
-    background-color: ${Colors.darkOrange};
     padding: 2px 6px;
     border-radius: 2px;
     user-select: none;
+
+    ${({ labelColor }) => css`
+      background-color: ${labelColor};
+    `}
   }
 
   h3 {

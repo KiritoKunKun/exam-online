@@ -29,6 +29,7 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'no-undef': 'off',
     'import/prefer-default-export': 'off',
+    'import/no-unresolved': 'off',
     'jsx-quotes': ['error', 'prefer-single'],
     'import/extensions': [
       'error',
