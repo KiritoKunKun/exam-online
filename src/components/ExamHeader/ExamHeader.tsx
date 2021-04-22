@@ -57,13 +57,12 @@ export const ExamHeader: React.FC<ExamHeaderProps> = ({
       );
   }, []);
 
+  const title =
+    screenWidth < 540 ? proof.exam.name.split(' ')[0] : proof.exam.description;
+
   return (
     <Container>
-      <h1>
-        {screenWidth < 540
-          ? proof.exam.name.split(' ')[0]
-          : proof.exam.description}
-      </h1>
+      <h1>{title}</h1>
 
       <HeaderItemContainer>
         {showTime ? (
@@ -86,7 +85,7 @@ export const ExamHeader: React.FC<ExamHeaderProps> = ({
           <QuestionsBookmarkContainer>
             <QuestionsBookmarkTopContainer>
               <h2>
-                <b>{questionIndex + 1}</b>/45
+                <b>{questionIndex + 1}</b>/{proof.questions.length}
               </h2>
               <CloseIcon onClick={() => toggleQuestions(false)} />
             </QuestionsBookmarkTopContainer>

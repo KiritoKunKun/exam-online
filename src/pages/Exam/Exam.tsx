@@ -33,8 +33,7 @@ interface ExamLocation {
 export const Exam = () => {
   const { state } = useLocation<ExamLocation>();
 
-  const [student] = useState<Student>(state.student);
-  const [proof, setProof] = useState<Proof>(state.proof);
+  const [proof] = useState<Proof>(state.proof);
   const [showQuestions, setShowQuestions] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [showAnswerOptionsIndex, setShowAnswerOptionsIndex] = useState(-1);
@@ -48,13 +47,9 @@ export const Exam = () => {
 
   const { addToast } = useToast();
 
-  const toggleBookmarkQuestion = () => {
-    const newProof = proof;
-
+  const toggleBookmark = () => {
     const bookmarked = !!proof.questions[questionIndex].bookmarked;
     proof.questions[questionIndex].bookmarked = !bookmarked;
-
-    setProof({ ...newProof });
 
     if (!bookmarked) {
       addToast('Marcada para revisar mais tarde');
@@ -73,14 +68,14 @@ export const Exam = () => {
   const isAnswerDisabled = (index: number) =>
     !!proof.questions[questionIndex].answers[index].disabled;
 
+  const shouldShowOptions = (answerIndex: number) =>
+    showAnswerOptionsIndex === answerIndex;
+
   const toggleDisableAnswer = (index: number) => {
-    const newProof = proof;
-
-    newProof.questions[questionIndex].answers[
+    proof.questions[questionIndex].answers[index].disabled = !isAnswerDisabled(
       index
-    ].disabled = !isAnswerDisabled(index);
+    );
 
-    setProof({ ...newProof });
     setShowAnswerOptionsIndex(-1);
 
     if (isAnswerSelected(index)) {
@@ -112,7 +107,7 @@ export const Exam = () => {
     <Container>
       <ExamHeader
         proof={proof}
-        student={student}
+        student={state.student}
         questionIndex={questionIndex}
         onSelectQuestion={setQuestionIndex}
         onToggleQuestions={setShowQuestions}
@@ -128,10 +123,11 @@ export const Exam = () => {
         <ExamContainer>
           <BookmarkContainer>
             <h2>{questionIndex + 1}</h2>
+
             {proof.questions[questionIndex].bookmarked ? (
-              <BookmarkIcon onClick={toggleBookmarkQuestion} />
+              <BookmarkIcon onClick={toggleBookmark} />
             ) : (
-              <BookmarkBorderSharpIcon onClick={toggleBookmarkQuestion} />
+              <BookmarkBorderSharpIcon onClick={toggleBookmark} />
             )}
           </BookmarkContainer>
 
@@ -146,7 +142,6 @@ export const Exam = () => {
             <AnswersContainer>
               {proof.questions[questionIndex].answers.map((answer, index) => (
                 <div key={`answer-${index}`}>
-                  {showAnswerOptionsIndex === index && <OptionsMask />}
                   <AnswerContainer
                     selected={isAnswerSelected(index)}
                     disabled={isAnswerDisabled(index)}
@@ -155,15 +150,15 @@ export const Exam = () => {
                       setHoldedAnswer(index);
                       longPressBind.onMouseDown(event);
                     }}
-                    onMouseUp={longPressBind.onMouseUp}
                     onTouchStart={event => {
                       setHoldedAnswer(index);
                       longPressBind.onTouchStart(event);
                     }}
+                    onMouseUp={longPressBind.onMouseUp}
                     onTouchEnd={longPressBind.onTouchEnd}
-                    onMouseLeave={() => {}}
                   >
                     <h3>{getASCIIChar(index)}</h3>
+
                     <input
                       type='radio'
                       name='answer'
@@ -174,13 +169,15 @@ export const Exam = () => {
                       onFocus={() => selectAnswer(index)}
                       readOnly
                     />
+
                     <label htmlFor={getASCIIChar(index)}>{answer.value}</label>
+
                     <MoreHorizSharpIcon
                       ref={optionsIconRef}
                       onClick={() => setShowAnswerOptionsIndex(index)}
                     />
 
-                    {showAnswerOptionsIndex === index && (
+                    {shouldShowOptions(index) && (
                       <AnswerOptionsContainer ref={optionsBoxRef}>
                         {isAnswerSelected(index) && (
                           <div
@@ -203,6 +200,8 @@ export const Exam = () => {
                       </AnswerOptionsContainer>
                     )}
                   </AnswerContainer>
+
+                  {shouldShowOptions(index) && <OptionsMask />}
                 </div>
               ))}
             </AnswersContainer>

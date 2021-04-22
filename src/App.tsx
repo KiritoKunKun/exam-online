@@ -8,9 +8,7 @@ export const App = () => (
   <BrowserRouter>
     <AppProvider>
       <Header />
-
       <Routes />
-
       <GlobalStyle />
     </AppProvider>
   </BrowserRouter>
