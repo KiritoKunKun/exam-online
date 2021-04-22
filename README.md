@@ -36,7 +36,7 @@ ou
 yarn db
 ```
 
-6. Na mesma pasta, rode os scripts do React com o comando:
+6. Na mesma pasta, rode o projeto com o comando:
 
 ```
 npm run start
