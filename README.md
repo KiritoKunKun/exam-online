@@ -1,51 +1,23 @@
-## Exam Online 🎮
+## Exam Online
 
-### Como rodar o projeto ⚙️
+Do your tests more quickly!
 
-1. Faça o clone do repositório
+![image](https://user-images.githubusercontent.com/57424426/145923614-4dca3a8e-79f7-4759-80fe-b17d5f87d477.png)
 
-2. Instale as dependências do projeto:
+### Installation
 
-```
-npm install
-```
+Install all dependencies in the project directory by the following command:
 
-ou
+#### `yarn`
 
-```
-yarn
-```
+Start the JSON server:
 
-3. Crie um arquivo chamado .env com o mesmo conteúdo do arquivo .env.example
+#### `yarn db`
 
-4. Instale a biblioteca [JSON Server](https://github.com/typicode/json-server):
+Run the project in localhost:
 
-```
-npm install -g json-server
-```
+#### `yarn start`
 
-5. Na pasta onde está localizado o projeto, rode na sua máquina o servidor com o seguinte comando:
+---
 
-```
-npm run db
-```
-
-ou
-
-```
-yarn db
-```
-
-6. Na mesma pasta, rode o projeto com o comando:
-
-```
-npm run start
-```
-
-ou
-
-```
-yarn start
-```
-
-## Parabéns! Você conseguiu rodar o projeto! 😄
+## Congratulations! Now you have Exam Online running in your machine! 😀
