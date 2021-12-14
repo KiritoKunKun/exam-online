@@ -1,4 +1,4 @@
-## Teste Front-end Developer 🎮
+## Exam Online 🎮
 
 ### Como rodar o projeto ⚙️
 
@@ -48,4 +48,4 @@ ou
 yarn start
 ```
 
-## Pronto! Agora é só me avaliar com carinho! 😄
+## Parabéns! Você conseguiu rodar o projeto! 😄
